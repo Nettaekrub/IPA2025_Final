@@ -1,11 +1,3 @@
-#######################################################################################
-# Yourname:
-# Your student ID:
-# Your GitHub Repo:
-
-#######################################################################################
-# 1. Import libraries for API requests, JSON formatting, time, os, (restconf_final or netconf_final), netmiko_final, and ansible_final.
-
 import os
 import time
 import json
@@ -19,16 +11,9 @@ import netconf_final
 import netmiko_final
 import ansible_final
 
-
-#######################################################################################
-# 2. Assign the Webex access token to the variable ACCESS_TOKEN using environment variables.
 load_dotenv()
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 
-#######################################################################################
-# 3. Prepare parameters get the latest message for messages API.
-
-# Defines a variable that will hold the roomId
 roomIdToGetMessages = (
     "Y2lzY29zcGFyazovL3VybjpURUFNOnVzLXdlc3QtMl9yL1JPT00vYmQwODczMTAtNmMyNi0xMWYwLWE1MWMtNzkzZDM2ZjZjM2Zm"
 )
@@ -36,45 +21,28 @@ roomIdToGetMessages = (
 last_message_id = None
 
 while True:
-    # always add 1 second of delay to the loop to not go over a rate limit of API calls
     time.sleep(1)
-
-    # the Webex Teams GET parameters
-    #  "roomId" is the ID of the selected room
-    #  "max": 1  limits to get only the very last message in the room
     getParameters = {"roomId": roomIdToGetMessages, "max": 1}
 
-    # the Webex Teams HTTP header, including the Authoriztion
     getHTTPHeader = {"Authorization": f"Bearer {ACCESS_TOKEN}"}
 
-# 4. Provide the URL to the Webex Teams messages API, and extract location from the received message.
-
-    # Send a GET request to the Webex Teams messages API.
-    # - Use the GetParameters to get only the latest message.
-    # - Store the message in the "r" variable.
     r = requests.get(
         "https://webexapis.com/v1/messages",
         params=getParameters,
         headers=getHTTPHeader,
     )
-    # verify if the retuned HTTP status code is 200/OK
     if not r.status_code == 200:
         raise Exception(
             "Incorrect reply from Webex Teams API. Status code: {}".format(r.status_code)
         )
 
-    # get the JSON formatted returned data
     json_data = r.json()
 
-    # check if there are any messages in the "items" array
     if len(json_data["items"]) == 0:
         continue
 
-    # store the array of messages
     messages = json_data["items"]
-    # store the ID of the first message
     message_id = messages[0]["id"]
-    # store the text of the first message in the array
     message = messages[0]["text"]
     print("Received message: " + message)
 
@@ -120,7 +88,6 @@ while True:
                         responseMessage = result
                         filename = None
 
-                    # ส่งไฟล์ถ้ามี
                     if filename and os.path.exists(filename):
                         with open(filename, "rb") as fileobject:
                             postData = MultipartEncoder({
