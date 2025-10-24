@@ -1,0 +1,19 @@
+---
+- name: AUTOMATIC BACKUP OF RUNNING-CONFIG
+  hosts: R1-Exam
+  gather_facts: false
+  connection: network_cli
+  vars:
+    student_id: "66070118"
+
+  tasks:
+    - name: DISPLAYING THE RUNNING-CONFIG
+      ios_command:
+        commands:
+          - show running-config
+      register: config
+
+    - name: SAVE OUTPUT TO CURRENT FOLDER
+      copy:
+        content: "{{ config.stdout[0] }}"
+        dest: "show_run_{{ student_id }}_{{ inventory_hostname }}.txt"
