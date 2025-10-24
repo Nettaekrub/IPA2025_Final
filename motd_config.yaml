@@ -1,0 +1,13 @@
+- name: Configure MOTD on Cisco IOS
+  hosts: all
+  gather_facts: false
+  connection: network_cli
+  vars:
+    motd_message: "Authorized users only! Managed by 66070118"
+
+  tasks:
+    - name: Set MOTD
+      cisco.ios.ios_banner:
+        banner: motd     
+        text: "{{ motd_message }}"
+        state: present        
