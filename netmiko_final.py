@@ -54,7 +54,7 @@ def gigabit_status(ip):
         pprint(ans)
         return ans
 
-def motd_reader(ip, student_id="66070118"):
+def motd_reader(ip):
     device_params = {
         "device_type": "cisco_ios",
         "ip": ip,
@@ -72,7 +72,7 @@ def motd_reader(ip, student_id="66070118"):
 
             motd_text = match.group(2).strip()
 
-            if student_id in motd_text:
+            if motd_text:
                 return motd_text
             else:
                 return "Error: No MOTD Configured"
