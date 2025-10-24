@@ -73,8 +73,8 @@ while True:
                 command = parts[2].lower()
 
                 if command == "motd":
-                    if len(parts) > 3:
-                        message_text = " ".join(parts[3:])
+                    message_text = " ".join(parts[3:]).strip()
+                    if message_text:
                         responseMessage = ansible_final.motd_set_ansible(ip, message_text)
                     else:
                         responseMessage = netmiko_final.motd_reader(ip)
