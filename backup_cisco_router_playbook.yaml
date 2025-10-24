@@ -16,4 +16,4 @@
     - name: SAVE OUTPUT TO CURRENT FOLDER
       copy:
         content: "{{ config.stdout[0] }}"
-        dest: "show_run_{{ student_id }}_{{ inventory_hostname }}.txt"
+        dest: "show_run_{{ student_id }}_{{ ansible_host | replace('.', '_') }}.txt"
