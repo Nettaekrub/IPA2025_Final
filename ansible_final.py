@@ -40,7 +40,6 @@ def showrun(ip):
         print(f"Playbook failed (Return Code: {result.returncode}).")
         return f"Error: Ansible"
 def motd_set_ansible(ip, message):
-    print(f"[DEBUG] Setting MOTD on {ip} with message: {message!r}")
     inventory_content = f"""
     [routers]
     R1-Exam ansible_host={ip} ansible_user=admin ansible_password=cisco ansible_connection=network_cli ansible_network_os=cisco.ios.ios ansible_ssh_common_args='-o StrictHostKeyChecking=no'
@@ -58,17 +57,12 @@ def motd_set_ansible(ip, message):
         "-e", extra_vars_json
     ]
 
-    print(f"[DEBUG] Running command: {' '.join(command)}")
-
     env = os.environ.copy()
     env["ANSIBLE_HOST_KEY_CHECKING"] = "False"
 
     result = subprocess.run(command, cwd=os.getcwd(), capture_output=True, text=True, env=env)
-    print("\n[DEBUG] --- ANSIBLE STDOUT ---")
     print(result.stdout)
-    print("\n[DEBUG] --- ANSIBLE STDERR ---")
     print(result.stderr)
-    print("[DEBUG] --------------------\n")
 
     if result.returncode == 0:
         return "Ok: success"
